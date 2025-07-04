@@ -12,6 +12,15 @@ This is a simple Flask web application that uses a machine learning model to pre
 - `create_new_model.py` - Script to create a fresh model if needed
 - `test_app.py` - Script to test the application functionality
 - `run_app.bat` - Windows batch file to easily run the application
+- `requirements.txt` - List of Python dependencies needed for the application
+
+## Installation
+
+1. Make sure you have Python installed (version 3.6 or higher)
+2. Install the required dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
 
 ## How to Run
 
@@ -22,18 +31,21 @@ This is a simple Flask web application that uses a machine learning model to pre
 ## Sample Measurements
 
 ### Iris Setosa
+
 - Sepal Length: 5.1 cm
 - Sepal Width: 3.5 cm
 - Petal Length: 1.4 cm
 - Petal Width: 0.2 cm
 
 ### Iris Versicolor
+
 - Sepal Length: 6.0 cm
 - Sepal Width: 2.7 cm
 - Petal Length: 4.2 cm
 - Petal Width: 1.3 cm
 
 ### Iris Virginica
+
 - Sepal Length: 6.8 cm
 - Sepal Width: 3.0 cm
 - Petal Length: 5.5 cm
@@ -44,9 +56,8 @@ This is a simple Flask web application that uses a machine learning model to pre
 If you encounter issues:
 
 1. Run `python test_app.py` to verify the model is working correctly
-2. Check that you have all the required Python packages installed:
-   - Flask
-   - scikit-learn
-   - joblib
-   - numpy
+2. Check that you have all the required Python packages installed by running:
+   ```
+   pip install -r requirements.txt
+   ```
 3. Try generating a new model with `python create_new_model.py`
