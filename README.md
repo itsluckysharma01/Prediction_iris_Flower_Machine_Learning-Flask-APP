@@ -1,5 +1,7 @@
 # Iris Flower Detection Web Application
 
+Hare Checkout:=👉https://itsluckysharma01.github.io/Prediction_iris_Flower_Machine_Learning-Flask/👈🫡
+
 This is a simple Flask web application that uses a machine learning model to predict the species of iris flowers based on measurements.
 
 ## Files and Structure
@@ -12,15 +14,6 @@ This is a simple Flask web application that uses a machine learning model to pre
 - `create_new_model.py` - Script to create a fresh model if needed
 - `test_app.py` - Script to test the application functionality
 - `run_app.bat` - Windows batch file to easily run the application
-- `requirements.txt` - List of Python dependencies needed for the application
-
-## Installation
-
-1. Make sure you have Python installed (version 3.6 or higher)
-2. Install the required dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
 
 ## How to Run
 
@@ -56,8 +49,9 @@ This is a simple Flask web application that uses a machine learning model to pre
 If you encounter issues:
 
 1. Run `python test_app.py` to verify the model is working correctly
-2. Check that you have all the required Python packages installed by running:
-   ```
-   pip install -r requirements.txt
-   ```
+2. Check that you have all the required Python packages installed:
+   - Flask
+   - scikit-learn
+   - joblib
+   - numpy
 3. Try generating a new model with `python create_new_model.py`
