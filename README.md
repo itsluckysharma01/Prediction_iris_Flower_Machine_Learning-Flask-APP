@@ -9,9 +9,7 @@ This is a simple Flask web application that uses a machine learning model to pre
 - `templates/` - Folder containing HTML templates
   - `form.html` - Input form for flower measurements
   - `result.html` - Page showing prediction results
-- `create_new_model.py` - Script to create a fresh model if needed
-- `test_app.py` - Script to test the application functionality
-- `run_app.bat` - Windows batch file to easily run the application
+
 
 ## How to Run
 
@@ -39,14 +37,4 @@ This is a simple Flask web application that uses a machine learning model to pre
 - Petal Length: 5.5 cm
 - Petal Width: 2.1 cm
 
-## Troubleshooting
 
-If you encounter issues:
-
-1. Run `python test_app.py` to verify the model is working correctly
-2. Check that you have all the required Python packages installed:
-   - Flask
-   - scikit-learn
-   - joblib
-   - numpy
-3. Try generating a new model with `python create_new_model.py`
