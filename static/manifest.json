@@ -1,0 +1,36 @@
+{
+  "name": "Iris Flower AI Predictor",
+  "short_name": "IrisAI",
+  "description": "Interactive AI-powered iris flower species prediction with beautiful animations",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#667eea",
+  "theme_color": "#764ba2",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/static/favicon-16x16.svg",
+      "sizes": "16x16",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/static/favicon-32x32.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/static/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["education", "utilities", "science"],
+  "lang": "en",
+  "dir": "ltr"
+}

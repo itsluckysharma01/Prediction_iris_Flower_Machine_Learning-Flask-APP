@@ -1,0 +1,294 @@
+/* Enhanced CSS for interactive flower animations and effects */
+
+/* Global background animations */
+.flower-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -3;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    opacity: 0.1;
+    animation: gradient-shift 10s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0%, 100% { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); }
+    33% { background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%); }
+    66% { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #667eea 100%); }
+}
+
+/* Enhanced floating particles system */
+.flower-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.flower-particles::before {
+    content: '🌸';
+    position: absolute;
+    top: 15%;
+    left: 8%;
+    font-size: 1.8em;
+    animation: float-complex 12s ease-in-out infinite;
+    opacity: 0.8;
+}
+
+.flower-particles::after {
+    content: '🌺';
+    position: absolute;
+    top: 65%;
+    right: 12%;
+    font-size: 1.5em;
+    animation: float-complex 10s ease-in-out infinite reverse;
+    opacity: 0.8;
+}
+
+/* Enhanced floating flowers with more variety */
+.flower-extra {
+    position: fixed;
+    top: 35%;
+    left: 85%;
+    font-size: 2em;
+    animation: spiral-float 15s ease-in-out infinite;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.flower-extra::before {
+    content: '🌷';
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+}
+
+.flower-extra2 {
+    position: fixed;
+    top: 75%;
+    left: 15%;
+    font-size: 1.6em;
+    animation: wave-float 8s ease-in-out infinite;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.flower-extra2::before {
+    content: '🌻';
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+}
+
+/* Additional flower elements for richer animation */
+.flower-extra3 {
+    position: fixed;
+    top: 25%;
+    left: 25%;
+    font-size: 1.4em;
+    animation: orbit-float 20s linear infinite;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.flower-extra3::before {
+    content: '🌼';
+}
+
+.flower-extra4 {
+    position: fixed;
+    top: 55%;
+    right: 25%;
+    font-size: 1.7em;
+    animation: pendulum-float 6s ease-in-out infinite;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.flower-extra4::before {
+    content: '�';
+}
+
+/* Interactive hover elements */
+.interactive-flower {
+    position: fixed;
+    font-size: 2.5em;
+    z-index: 5;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: gentle-glow 3s ease-in-out infinite alternate;
+}
+
+.interactive-flower:hover {
+    transform: scale(1.5) rotate(180deg);
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+}
+
+/* Complex animation keyframes */
+@keyframes float-complex {
+    0%, 100% { 
+        transform: translateY(0px) translateX(0px) rotate(0deg); 
+        opacity: 0.8;
+    }
+    25% { 
+        transform: translateY(-15px) translateX(10px) rotate(90deg); 
+        opacity: 1;
+    }
+    50% { 
+        transform: translateY(-25px) translateX(-5px) rotate(180deg); 
+        opacity: 0.8;
+    }
+    75% { 
+        transform: translateY(-10px) translateX(-15px) rotate(270deg); 
+        opacity: 1;
+    }
+}
+
+@keyframes spiral-float {
+    0% { 
+        transform: translateY(0px) rotate(0deg) translateX(0px); 
+        opacity: 0.7;
+    }
+    25% { 
+        transform: translateY(-20px) rotate(90deg) translateX(20px); 
+        opacity: 1;
+    }
+    50% { 
+        transform: translateY(-30px) rotate(180deg) translateX(0px); 
+        opacity: 0.7;
+    }
+    75% { 
+        transform: translateY(-20px) rotate(270deg) translateX(-20px); 
+        opacity: 1;
+    }
+    100% { 
+        transform: translateY(0px) rotate(360deg) translateX(0px); 
+        opacity: 0.7;
+    }
+}
+
+@keyframes wave-float {
+    0%, 100% { 
+        transform: translateY(0px) translateX(0px) scale(1) rotate(0deg); 
+    }
+    33% { 
+        transform: translateY(-12px) translateX(15px) scale(1.1) rotate(120deg); 
+    }
+    66% { 
+        transform: translateY(-8px) translateX(-10px) scale(0.9) rotate(240deg); 
+    }
+}
+
+@keyframes orbit-float {
+    0% { 
+        transform: rotate(0deg) translateX(30px) rotate(0deg); 
+    }
+    100% { 
+        transform: rotate(360deg) translateX(30px) rotate(-360deg); 
+    }
+}
+
+@keyframes pendulum-float {
+    0%, 100% { 
+        transform: translateX(0px) rotate(0deg); 
+    }
+    50% { 
+        transform: translateX(20px) rotate(15deg); 
+    }
+}
+
+@keyframes gentle-glow {
+    0% { 
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3)); 
+    }
+    100% { 
+        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.6)); 
+    }
+}
+
+/* Pulsing light effect */
+@keyframes pulse-light {
+    0%, 100% { 
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); 
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); 
+        transform: scale(1.05);
+    }
+}
+
+/* Enhanced float animation */
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg) scale(1); 
+        opacity: 0.7;
+        filter: hue-rotate(0deg);
+    }
+    25% { 
+        transform: translateY(-15px) rotate(90deg) scale(1.1); 
+        opacity: 1;
+        filter: hue-rotate(90deg);
+    }
+    50% { 
+        transform: translateY(-25px) rotate(180deg) scale(0.9); 
+        opacity: 0.8;
+        filter: hue-rotate(180deg);
+    }
+    75% { 
+        transform: translateY(-10px) rotate(270deg) scale(1.05); 
+        opacity: 1;
+        filter: hue-rotate(270deg);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .flower-particles::before,
+    .flower-particles::after,
+    .flower-extra,
+    .flower-extra2,
+    .flower-extra3,
+    .flower-extra4 {
+        font-size: 1.2em;
+    }
+    
+    .interactive-flower {
+        font-size: 1.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .flower-particles::before,
+    .flower-particles::after,
+    .flower-extra,
+    .flower-extra2,
+    .flower-extra3,
+    .flower-extra4 {
+        font-size: 1em;
+    }
+    
+    .interactive-flower {
+        font-size: 1.5em;
+    }
+}
+
+/* Performance optimization for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .flower-particles::before,
+    .flower-particles::after,
+    .flower-extra,
+    .flower-extra2,
+    .flower-extra3,
+    .flower-extra4,
+    .interactive-flower {
+        animation: none;
+        opacity: 0.5;
+    }
+}

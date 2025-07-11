@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+    <defs>
+        <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#764ba2;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#f093fb;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="flowerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#FFE0E6;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#FFB3BA;stop-opacity:1" />
+        </linearGradient>
+        <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.3" />
+        </filter>
+    </defs>
+
+    <!-- Rounded rectangle background -->
+    <rect x="0" y="0" width="180" height="180" rx="40" ry="40" fill="url(#bgGrad)" />
+
+    <!-- Main flower -->
+    <g transform="translate(90,90)" filter="url(#dropshadow)">
+        <!-- Petals -->
+        <ellipse cx="0" cy="-25" rx="12" ry="20" fill="url(#flowerGrad)" transform="rotate(0)" />
+        <ellipse cx="0" cy="-25" rx="12" ry="20" fill="url(#flowerGrad)" transform="rotate(60)" />
+        <ellipse cx="0" cy="-25" rx="12" ry="20" fill="url(#flowerGrad)" transform="rotate(120)" />
+        <ellipse cx="0" cy="-25" rx="12" ry="20" fill="url(#flowerGrad)" transform="rotate(180)" />
+        <ellipse cx="0" cy="-25" rx="12" ry="20" fill="url(#flowerGrad)" transform="rotate(240)" />
+        <ellipse cx="0" cy="-25" rx="12" ry="20" fill="url(#flowerGrad)" transform="rotate(300)" />
+
+        <!-- Center -->
+        <circle cx="0" cy="0" r="8" fill="#FFD700" />
+        <circle cx="-2" cy="-2" r="3" fill="#FFF" opacity="0.6" />
+    </g>
+
+    <!-- Small decorative flowers -->
+    <circle cx="45" cy="45" r="6" fill="#FFE0E6" opacity="0.7" />
+    <circle cx="135" cy="45" r="6" fill="#FFE0E6" opacity="0.7" />
+    <circle cx="45" cy="135" r="6" fill="#FFE0E6" opacity="0.7" />
+    <circle cx="135" cy="135" r="6" fill="#FFE0E6" opacity="0.7" />
+</svg>

@@ -1,104 +1,602 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Prediction Result</title>
+    <title>🎉 Prediction Result - Iris Flower AI 🎉</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='flower-animation.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+    <link rel="icon" type="image/svg+xml" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.svg') }}">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.svg') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.svg') }}">
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    
+    <!-- Meta tags for better SEO -->
+    <meta name="description" content="AI prediction results for iris flower species classification with detailed botanical information.">
+    <meta name="keywords" content="iris, flower, prediction, results, machine learning, botanical, classification">
+    <meta name="author" content="Iris Flower AI">
+    
+    <!-- Open Graph meta tags for social sharing -->
+    <meta property="og:title" content="🎉 Iris Flower AI Prediction Results">
+    <meta property="og:description" content="View your iris flower species prediction with detailed botanical information">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ url_for('static', filename='apple-touch-icon.svg', _external=True) }}">
+    
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Dynamic background colors based on flower type */
+        body.setosa-result {
+            background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 50%, #F0F8FF 100%);
+        }
+
+        body.versicolor-result {
+            background: linear-gradient(135deg, #8A2BE2 0%, #9370DB 50%, #DDA0DD 100%);
+        }
+
+        body.virginica-result {
+            background: linear-gradient(135deg, #4B0082 0%, #663399 50%, #9966CC 100%);
+        }
+
+        body.error-result {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            overflow: hidden;
+        }
+        
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            filter: blur(1px);
+        }
+        
+        .video-background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            position: relative;
+            z-index: 1;
         }
+        
         .result-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             text-align: center;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: bounceIn 0.8s ease-out;
+            margin-top: 50px;
         }
-        h2 {
+
+        h1 {
             color: #4CAF50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: glow 2s ease-in-out infinite alternate;
         }
-        .prediction {
-            font-size: 24px;
+
+        .prediction-display {
+            font-size: 2em;
             color: #333;
-            margin: 20px 0;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border-left: 5px solid #4CAF50;
+            animation: slideInLeft 0.8s ease-out;
         }
-        .back-btn {
-            display: inline-block;
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 4px;
-            margin-top: 20px;
+
+        .flower-showcase {
+            margin: 30px 0;
+            animation: fadeInUp 1s ease-out;
         }
-        .back-btn:hover {
-            background-color: #45a049;
+
+        .flower-image-large {
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            animation: pulse 3s ease-in-out infinite;
+            border: 5px solid #fff;
+            transition: all 0.3s ease;
+        }
+
+        .setosa-large { 
+            background-image: url('{{ url_for("static", filename="images/iris setosa.jpg") }}');
+            box-shadow: 0 20px 50px rgba(255, 182, 193, 0.4);
+        }
+
+        .versicolor-large { 
+            background-image: url('{{ url_for("static", filename="images/iris versicolor.jpg") }}');
+            box-shadow: 0 20px 50px rgba(138, 43, 226, 0.4);
+        }
+
+        .virginica-large { 
+            background-image: url('{{ url_for("static", filename="images/iris verginica.jpg") }}');
+            box-shadow: 0 20px 50px rgba(75, 0, 130, 0.4);
         }
         .flower-info {
-            margin-top: 20px;
+            margin-top: 30px;
             text-align: left;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 4px;
+            padding: 25px;
+            background: rgba(249, 249, 249, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            animation: slideInRight 0.8s ease-out;
         }
+
+        .flower-info h3 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .flower-facts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .fact-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .fact-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .fact-card h4 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        .fact-card p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 15px;
+            margin-top: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(76, 175, 80, 0.4);
+            text-decoration: none;
+            color: white;
+        }
+
         .error {
             color: #D8000C;
-            background-color: #FFD2D2;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
+            background: rgba(255, 210, 210, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
             text-align: left;
+            border-left: 5px solid #D8000C;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            font-size: 1.5em;
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        .particle:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { top: 20%; right: 15%; animation-delay: 1s; }
+        .particle:nth-child(3) { bottom: 30%; left: 5%; animation-delay: 2s; }
+        .particle:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 3s; }
+        .particle:nth-child(5) { top: 50%; left: 3%; animation-delay: 4s; }
+        .particle:nth-child(6) { top: 70%; right: 5%; animation-delay: 5s; }
+
+        .success-confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .confetti {
+            position: absolute;
+            font-size: 1.2em;
+            animation: confetti-fall 3s ease-in-out;
+        }
+
+        /* Flower-specific styling */
+        .setosa-result .result-container {
+            border-left: 5px solid #FFB6C1;
+        }
+
+        .versicolor-result .result-container {
+            border-left: 5px solid #8A2BE2;
+        }
+
+        .virginica-result .result-container {
+            border-left: 5px solid #4B0082;
+        }
+
+        .flower-image-large:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+        }
+
+        /* Add subtle pattern overlay for texture */
+        .flower-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 2px, transparent 2px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            border-radius: 15px;
+        }
+
+        /* Color-specific text highlights */
+        .setosa-result h1 {
+            color: #FF69B4;
+            text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.3);
+        }
+
+        .versicolor-result h1 {
+            color: #9370DB;
+            text-shadow: 2px 2px 4px rgba(138, 43, 226, 0.3);
+        }
+
+        .virginica-result h1 {
+            color: #DDA0DD;
+            text-shadow: 2px 2px 4px rgba(75, 0, 130, 0.3);
+        }
+
+        @keyframes glow {
+            from { text-shadow: 2px 2px 4px rgba(0,0,0,0.1), 0 0 10px rgba(76, 175, 80, 0.3); }
+            to { text-shadow: 2px 2px 4px rgba(0,0,0,0.1), 0 0 20px rgba(76, 175, 80, 0.6); }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+            50% { transform: scale(1.05); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            25% { transform: translateY(-10px) rotate(90deg); opacity: 1; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.7; }
+            75% { transform: translateY(-10px) rotate(270deg); opacity: 1; }
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 15px; }
+            h1 { font-size: 2em; }
+            .prediction-display { font-size: 1.5em; }
+            .flower-image-large { width: 120px; height: 120px; }
+            .flower-facts { grid-template-columns: 1fr; }
         }
     </style>
 </head>
-<body>
-    <div class="result-container">
-        <h2>Prediction Result</h2>
-        
-        {% if error %}
-        <div class="error">
-            <p>{{ error }}</p>
-            <p>Please try again with different values or contact support.</p>
-        </div>
-        {% else %}
-        <div class="prediction">
-            The predicted flower is: <strong>{{ prediction }}</strong>
-        </div>
-        
-        {% if 'setosa' in prediction.lower() %}
-        <div class="flower-info">
-            <p><strong>Iris setosa</strong> is known for its:</p>
-            <ul>
-                <li>Small petal size</li>
-                <li>Distinctive blue-green foliage</li>
-                <li>Native to North America and eastern Asia</li>
-            </ul>
-        </div>
-        {% elif 'versicolor' in prediction.lower() %}
-        <div class="flower-info">
-            <p><strong>Iris versicolor</strong> is known for its:</p>
-            <ul>
-                <li>Medium-sized flowers</li>
-                <li>Blue to purple coloration</li>
-                <li>Native to eastern North America</li>
-            </ul>
-        </div>
-        {% elif 'virginica' in prediction.lower() %}
-        <div class="flower-info">
-            <p><strong>Iris virginica</strong> is known for its:</p>
-            <ul>
-                <li>Large petal size</li>
-                <li>Violet blue to purple coloration</li>
-                <li>Native to eastern North America</li>
-            </ul>
-        </div>
-        {% endif %}
-        {% endif %}
-        
-        <a href="/" class="back-btn">Make Another Prediction</a>
+<body class="{% if error %}error-result{% elif 'setosa' in prediction.lower() %}setosa-result{% elif 'versicolor' in prediction.lower() %}versicolor-result{% elif 'virginica' in prediction.lower() %}virginica-result{% else %}error-result{% endif %}">
+    <!-- Background video -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="{{ url_for('static', filename='videos/flowers.mp4') }}" type="video/mp4">
+            <!-- Online fallback videos -->
+            <source src="https://cdn.pixabay.com/video/2022/03/27/112744-693121688_large.mp4" type="video/mp4">
+            <source src="https://cdn.pixabay.com/video/2019/06/10/24170-342584456_large.mp4" type="video/mp4">
+        </video>
     </div>
+    
+    <!-- Floating particles -->
+    <div class="floating-particles">
+        <div class="particle">🌸</div>
+        <div class="particle">🌺</div>
+        <div class="particle">🌷</div>
+        <div class="particle">🌻</div>
+        <div class="particle">🌼</div>
+        <div class="particle">💐</div>
+    </div>
+    
+    <div class="container">
+        <div class="result-container">
+            <h1>🎉 AI Prediction Complete! 🎉</h1>
+            
+            {% if error %}
+            <div class="error">
+                <h3>⚠️ Prediction Error</h3>
+                <p>{{ error }}</p>
+                <p>Please try again with different values or contact support if the problem persists.</p>
+            </div>
+            {% else %}
+            <div class="prediction-display">
+                🌟 <strong>{{ prediction }}</strong> 🌟
+            </div>
+            
+            <div class="flower-showcase">
+                {% if 'setosa' in prediction.lower() %}
+                <div class="flower-image-large setosa-large"></div>
+                {% elif 'versicolor' in prediction.lower() %}
+                <div class="flower-image-large versicolor-large"></div>
+                {% elif 'virginica' in prediction.lower() %}
+                <div class="flower-image-large virginica-large"></div>
+                {% endif %}
+            </div>
+            
+            {% if 'setosa' in prediction.lower() %}
+            <div class="flower-info">
+                <h3>🌸 About Iris Setosa</h3>
+                <p>Congratulations! Your flower has been identified as <strong>Iris setosa</strong>, known for its beautiful <span style="color: #FFB6C1; font-weight: bold;">pink and white petals</span> with delicate appearance.</p>
+                
+                <div class="flower-facts">
+                    <div class="fact-card">
+                        <h4>🌿 Physical Traits</h4>
+                        <p>Small, delicate petals with <strong>pink and white coloration</strong>. Features distinctive blue-green foliage and compact size.</p>
+                    </div>
+                    <div class="fact-card">
+                        <h4>🌍 Origin</h4>
+                        <p>Native to North America, eastern Asia, and Arctic regions. Thrives in cooler climates.</p>
+                    </div>
+                    <div class="fact-card">
+                        <h4>🎨 Colors</h4>
+                        <p>Typically displays <strong>pink, white, and pale purple</strong> petals with yellow markings in the center.</p>
+                    </div>
+                    <div class="fact-card">
+                        <h4>📏 Size</h4>
+                        <p>Smallest of the three iris species, with petals typically under 2cm in length.</p>
+                    </div>
+                </div>
+            </div>
+            {% elif 'versicolor' in prediction.lower() %}
+            <div class="flower-info">
+                <h3>🌺 About Iris Versicolor</h3>
+                <p>Excellent prediction! Your flower has been identified as <strong>Iris versicolor</strong>, distinguished by its stunning <span style="color: #8A2BE2; font-weight: bold;">blue-purple blooms</span>.</p>
+                
+                <div class="flower-facts">
+                    <div class="fact-card">
+                        <h4>🌿 Physical Traits</h4>
+                        <p>Medium-sized flowers with beautiful <strong>blue to purple coloration</strong> and prominent veining patterns.</p>
+                    </div>
+                    <div class="fact-card">
+                        <h4>🌍 Origin</h4>
+                        <p>Native to eastern North America, commonly found in wetlands and marshy areas.</p>
+                    </div>
+                    <div class="fact-card">
+                        <h4>🎨 Colors</h4>
+                        <p>Ranges from <strong>deep blue to violet-purple</strong> with distinctive white and yellow markings.</p>
+                    </div>
+                    <div class="fact-card">
+                        <h4>💧 Habitat</h4>
+                        <p>Prefers moist soil conditions and is often called the "Blue Flag" iris.</p>
+                    </div>
+                </div>
+            </div>
+            {% elif 'virginica' in prediction.lower() %}
+            <div class="flower-info">
+                <h3>🌷 About Iris Virginica</h3>
+                <p>Wonderful identification! Your flower has been classified as <strong>Iris virginica</strong>, renowned for its magnificent <span style="color: #4B0082; font-weight: bold;">deep violet-purple petals</span>.</p>
+                
+                <div class="flower-facts">
+                    <div class="fact-card">
+                        <h4>🌿 Physical Traits</h4>
+                        <p>Largest petals among iris species, with impressive <strong>violet-blue to deep purple</strong> coloration.</p>
+                    </div>
+                    <div class="fact-card">
+                        <h4>🌍 Origin</h4>
+                        <p>Native to eastern North America, particularly abundant in Virginia (hence the name).</p>
+                    </div>
+                    <div class="fact-card">
+                        <h4>🎨 Colors</h4>
+                        <p><strong>Deep violet-blue to rich purple</strong> with intricate vein patterns and yellow accents.</p>
+                    </div>
+                    <div class="fact-card">
+                        <h4>👑 Recognition</h4>
+                        <p>Often considered the most striking of the three species due to its large size and deep colors.</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
+            
+            <a href="/" class="back-btn">🔄 Try Another Prediction</a>
+        </div>
+    </div>
+
+    <!-- Success confetti effect -->
+    {% if not error %}
+    <div class="success-confetti" id="confetti"></div>
+    {% endif %}
+
+    <script>
+        // Create confetti effect for successful predictions
+        {% if not error %}
+        document.addEventListener('DOMContentLoaded', function() {
+            createConfetti();
+            
+            // Add floating particles dynamically
+            createFloatingParticles();
+        });
+
+        function createConfetti() {
+            const confettiContainer = document.getElementById('confetti');
+            const confettiSymbols = ['🎉', '🎊', '✨', '🌟', '💫', '🎈'];
+            
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.textContent = confettiSymbols[Math.floor(Math.random() * confettiSymbols.length)];
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    
+                    confettiContainer.appendChild(confetti);
+                    
+                    // Remove confetti after animation
+                    setTimeout(() => {
+                        if (confetti.parentNode) {
+                            confetti.parentNode.removeChild(confetti);
+                        }
+                    }, 4000);
+                }, i * 100);
+            }
+        }
+        {% endif %}
+
+        function createFloatingParticles() {
+            const particles = ['🌸', '🌺', '🌷', '🌻', '🌼', '💐', '🌹', '🏵️'];
+            const container = document.querySelector('.floating-particles');
+            
+            setInterval(() => {
+                if (container.children.length < 8) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 5 + 's';
+                    particle.style.fontSize = (Math.random() * 1 + 1) + 'em';
+                    
+                    container.appendChild(particle);
+                    
+                    // Remove particle after animation
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.parentNode.removeChild(particle);
+                        }
+                    }, 8000);
+                }
+            }, 3000);
+        }
+
+        // Add interactive effects to fact cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const factCards = document.querySelectorAll('.fact-card');
+            factCards.forEach((card, index) => {
+                card.style.animationDelay = (index * 0.2) + 's';
+                card.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(-5px) scale(1)';
+                });
+            });
+        });
+    </script>
 </body>
 </html>

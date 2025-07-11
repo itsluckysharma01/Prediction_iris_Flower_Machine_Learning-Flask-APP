@@ -1,68 +1,577 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Iris Predictor</title>
+    <title>Iris Flower Predictor - Interactive ML App </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='flower-animation.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+    <link rel="icon" type="image/svg+xml" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.svg') }}">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.svg') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.svg') }}">
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    
+    <!-- Meta tags for better SEO and social sharing -->
+    <meta name="description" content="Interactive AI-powered Iris Flower species prediction with beautiful animations and detailed flower information.">
+    <meta name="keywords" content="iris, flower, prediction, machine learning, AI, classification, botany">
+    <meta name="author" content="Iris Flower AI">
+    
+    <!-- Open Graph meta tags for social sharing -->
+    <meta property="og:title" content="🌸 Interactive Iris Flower AI Predictor">
+    <meta property="og:description" content="Discover iris flower species using AI with beautiful interactive animations">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ url_for('static', filename='apple-touch-icon.svg', _external=True) }}">
+    
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            overflow: hidden;
+        }
+        
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            filter: blur(1px);
+        }
+        
+        .video-background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.6) 100%);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 40px 0;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .subtitle {
+            color: #f0f0f0;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .iris-showcase {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .iris-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            flex: 1;
+            min-width: 200px;
+            max-width: 220px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .iris-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 15px;
+            z-index: -1;
+        }
+
+        .iris-card.setosa::before {
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.3) 0%, rgba(255, 240, 245, 0.3) 100%);
+        }
+
+        .iris-card.versicolor::before {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3) 0%, rgba(186, 85, 211, 0.3) 100%);
+        }
+
+        .iris-card.virginica::before {
+            background: linear-gradient(135deg, rgba(75, 0, 130, 0.3) 0%, rgba(147, 112, 219, 0.3) 100%);
+        }
+
+        .iris-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .iris-card:hover::before {
+            opacity: 1;
+        }
+
+        .iris-card.setosa:hover {
+            border-color: #FFB6C1;
+            box-shadow: 0 20px 40px rgba(255, 182, 193, 0.4);
+        }
+
+        .iris-card.versicolor:hover {
+            border-color: #8A2BE2;
+            box-shadow: 0 20px 40px rgba(138, 43, 226, 0.4);
+        }
+
+        .iris-card.virginica:hover {
+            border-color: #4B0082;
+            box-shadow: 0 20px 40px rgba(75, 0, 130, 0.4);
+        }
+
+        .iris-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            animation: pulse 3s ease-in-out infinite;
+            border: 3px solid #fff;
+            transition: all 0.3s ease;
+        }
+
+        .setosa-img { 
+            background-image: url('{{ url_for("static", filename="images/iris setosa.jpg") }}');
+        }
+        .versicolor-img { 
+            background-image: url('{{ url_for("static", filename="images/iris versicolor.jpg") }}');
+        }
+        .virginica-img { 
+            background-image: url('{{ url_for("static", filename="images/iris verginica.jpg") }}');
+        }
+
+        .iris-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .iris-description {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+        }
+
         h2 {
             color: #4CAF50;
             text-align: center;
+            margin: 30px 0 20px;
+            font-size: 2em;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         }
-        form {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        
+        .prediction-form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            margin: 20px 0;
+            animation: slideInUp 0.8s ease-out;
         }
-        input[type="text"] {
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        input[type="number"], input[type="text"] {
             width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
         }
-        input[type="submit"] {
+
+        input[type="number"]:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #4CAF50;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .submit-btn {
             width: 100%;
-            background-color: #4CAF50;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
             color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
+            padding: 18px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 15px;
             cursor: pointer;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
         }
-        input[type="submit"]:hover {
-            background-color: #45a049;
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(76, 175, 80, 0.4);
         }
-        .note {
-            margin-top: 20px;
-            font-size: 0.9em;
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .example-section {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .example-section h3 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .example-cards {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .example-card {
+            flex: 1;
+            min-width: 180px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .example-card:hover {
+            background: #e8f5e8;
+            transform: translateX(5px);
+        }
+
+        .example-card h4 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        .example-values {
+            font-size: 0.85em;
             color: #666;
+            line-height: 1.3;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            font-size: 1.5em;
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        .particle:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { top: 20%; right: 15%; animation-delay: 1s; }
+        .particle:nth-child(3) { bottom: 30%; left: 5%; animation-delay: 2s; }
+        .particle:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 3s; }
+        .particle:nth-child(5) { top: 50%; left: 3%; animation-delay: 4s; }
+        .particle:nth-child(6) { top: 70%; right: 5%; animation-delay: 5s; }
+
+        @keyframes glow {
+            from { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 10px rgba(255,255,255,0.1); }
+            to { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.3); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            25% { transform: translateY(-10px) rotate(90deg); opacity: 1; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.7; }
+            75% { transform: translateY(-10px) rotate(270deg); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 15px; }
+            h1 { font-size: 2.2em; }
+            .iris-showcase { flex-direction: column; align-items: center; }
+            .iris-card { max-width: 100%; }
+            .example-cards { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-    <h2>Iris Flower Prediction</h2>
-    <form action="/predict" method="POST">
-        <input type="text" name="sepal_length" placeholder="Sepal Length (cm)" required><br>
-        <input type="text" name="sepal_width" placeholder="Sepal Width (cm)" required><br>
-        <input type="text" name="petal_length" placeholder="Petal Length (cm)" required><br>
-        <input type="text" name="petal_width" placeholder="Petal Width (cm)" required><br>
-        <input type="submit" value="Predict Flower Species">
-    </form>
-    <div class="note">
-        <p><strong>Example values:</strong></p>
-        <p>Setosa: Sepal Length=5.1, Sepal Width=3.5, Petal Length=1.4, Petal Width=0.2</p>
-        <p>Versicolor: Sepal Length=6.0, Sepal Width=2.7, Petal Length=4.2, Petal Width=1.3</p>
-        <p>Virginica: Sepal Length=6.8, Sepal Width=3.0, Petal Length=5.5, Petal Width=2.1</p>
+    <!-- Background video -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="{{ url_for('static', filename='videos/flowers.mp4') }}" type="video/mp4">
+            <!-- Online fallback videos -->
+            <source src="https://cdn.pixabay.com/video/2022/03/27/112744-693121688_large.mp4" type="video/mp4">
+            <source src="https://cdn.pixabay.com/video/2019/06/10/24170-342584456_large.mp4" type="video/mp4">
+        </video>
     </div>
+    
+    <!-- Floating particles -->
+    <div class="floating-particles">
+        <div class="particle">🌸</div>
+        <div class="particle">🌺</div>
+        <div class="particle">🌷</div>
+        <div class="particle">🌻</div>
+        <div class="particle">🌼</div>
+        <div class="particle">💐</div>
+    </div>
+    
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>🌸 Iris Flower Predictor Using Machine Learning 🌸</h1>
+            <h1>🕵️‍♀️ Lucky Sharma</h1>
+            <p class="subtitle">Discover the beauty of machine learning with interactive flower classification</p>
+        </div>
+
+        <!-- Iris Showcase -->
+        <div class="iris-showcase">
+            <div class="iris-card setosa" onclick="fillExample('setosa')">
+                <div class="iris-image setosa-img"></div>
+                <div class="iris-name">Iris Setosa</div>
+                <div class="iris-description">Small, delicate petals with beautiful pink and white colors. Native to North America and eastern Asia.</div>
+            </div>
+            
+            <div class="iris-card versicolor" onclick="fillExample('versicolor')">
+                <div class="iris-image versicolor-img"></div>
+                <div class="iris-name">Iris Versicolor</div>
+                <div class="iris-description">Medium-sized flowers with stunning blue-purple hues. Found in eastern North America wetlands.</div>
+            </div>
+            
+            <div class="iris-card virginica" onclick="fillExample('virginica')">
+                <div class="iris-image virginica-img"></div>
+                <div class="iris-name">Iris Virginica</div>
+                <div class="iris-description">Large, magnificent blooms with deep violet-purple colors. The most distinctive of the iris family.</div>
+            </div>
+        </div>
+
+        <h2>🔮 Make Your Prediction</h2>
+        <form class="prediction-form" action="/predict" method="POST">
+            <div class="form-group">
+                <label for="sepal_length">🌿 Sepal Length (cm)</label>
+                <input type="number" id="sepal_length" name="sepal_length" step="0.1" min="0" max="10" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="sepal_width">🌿 Sepal Width (cm)</label>
+                <input type="number" id="sepal_width" name="sepal_width" step="0.1" min="0" max="10" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="petal_length">🌺 Petal Length (cm)</label>
+                <input type="number" id="petal_length" name="petal_length" step="0.1" min="0" max="10" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="petal_width">🌺 Petal Width (cm)</label>
+                <input type="number" id="petal_width" name="petal_width" step="0.1" min="0" max="10" required>
+            </div>
+            
+            <button type="submit" class="submit-btn">🚀 Predict Flower Species</button>
+        </form>
+
+        <!-- Example Section -->
+        <div class="example-section">
+            <h3>📊 Quick Examples - Click to Fill</h3>
+            <div class="example-cards">
+                <div class="example-card" onclick="fillExample('setosa')">
+                    <h4>🌸 Setosa Example</h4>
+                    <div class="example-values">
+                        SL: 5.1, SW: 3.5<br>
+                        PL: 1.4, PW: 0.2
+                    </div>
+                </div>
+                
+                <div class="example-card" onclick="fillExample('versicolor')">
+                    <h4>🌺 Versicolor Example</h4>
+                    <div class="example-values">
+                        SL: 6.0, SW: 2.7<br>
+                        PL: 4.2, PW: 1.3
+                    </div>
+                </div>
+                
+                <div class="example-card" onclick="fillExample('virginica')">
+                    <h4>🌷 Virginica Example</h4>
+                    <div class="example-values">
+                        SL: 6.8, SW: 3.0<br>
+                        PL: 5.5, PW: 2.1
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function fillExample(type) {
+            const examples = {
+                'setosa': { sl: 5.1, sw: 3.5, pl: 1.4, pw: 0.2 },
+                'versicolor': { sl: 6.0, sw: 2.7, pl: 4.2, pw: 1.3 },
+                'virginica': { sl: 6.8, sw: 3.0, pl: 5.5, pw: 2.1 }
+            };
+            
+            const example = examples[type];
+            if (example) {
+                document.getElementById('sepal_length').value = example.sl;
+                document.getElementById('sepal_width').value = example.sw;
+                document.getElementById('petal_length').value = example.pl;
+                document.getElementById('petal_width').value = example.pw;
+                
+                // Add visual feedback
+                const form = document.querySelector('.prediction-form');
+                form.style.background = 'rgba(76, 175, 80, 0.1)';
+                setTimeout(() => {
+                    form.style.background = 'rgba(255, 255, 255, 0.95)';
+                }, 500);
+            }
+        }
+
+        // Add interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate form inputs on focus
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+
+            // Add particles dynamically
+            createFloatingParticles();
+        });
+
+        function createFloatingParticles() {
+            const particles = ['🌸', '🌺', '🌷', '🌻', '🌼', '💐', '🌹', '🏵️'];
+            const container = document.querySelector('.floating-particles');
+            
+            setInterval(() => {
+                if (container.children.length < 10) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 5 + 's';
+                    particle.style.fontSize = (Math.random() * 1 + 1) + 'em';
+                    
+                    container.appendChild(particle);
+                    
+                    // Remove particle after animation
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.parentNode.removeChild(particle);
+                        }
+                    }, 8000);
+                }
+            }, 2000);
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,3 @@
+# This is a placeholder for the actual video file
+# For a real implementation, you would place a flower video file here
+# The application falls back to online video sources if this file is not available
