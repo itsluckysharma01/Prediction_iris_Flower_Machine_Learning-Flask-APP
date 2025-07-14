@@ -77,19 +77,6 @@ pip install pandas numpy matplotlib seaborn scikit-learn jupyter
 jupyter notebook iris_flower_Detection_ML-1.ipynb
 ```
 
-### 4️⃣ **Make a Quick Prediction**
-```python
-import joblib
-import pandas as pd
-
-# Load the trained model
-model = joblib.load('iris_flower_model.pkl')
-
-# Make a prediction
-sample = [[5.1, 3.5, 1.4, 0.2]]  # [sepal_length, sepal_width, petal_length, petal_width]
-prediction = model.predict(sample)
-print(f"Predicted species: {prediction[0]}")
-```
 
 ## 📊 Features
 
@@ -104,11 +91,6 @@ print(f"Predicted species: {prediction[0]}")
 - ✅ **Decision Tree Classifier** - Alternative approach
 - ✅ **K-Nearest Neighbors** - Distance-based classification
 - ✅ **Model comparison** and performance evaluation
-
-### 📈 **Visualizations**
-- ✅ Histograms for feature distributions
-- ✅ Scatter plots for feature relationships
-- ✅ Species distribution analysis
 
 ### 💾 **Model Persistence**
 - ✅ Save models using **joblib**
@@ -195,46 +177,6 @@ The project includes several visualization techniques:
 3. **Pair Plots** - Multiple feature comparisons
 4. **Box Plots** - Statistical summaries by species
 
-### 🎨 **Example Visualization Code**
-```python
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-# Create scatter plot
-plt.figure(figsize=(10, 6))
-sns.scatterplot(data=iris, x='sepal_length', y='sepal_width', hue='species')
-plt.title('Sepal Length vs Width by Species')
-plt.show()
-```
-
-## 🔮 Making Predictions
-
-### 🧪 **Interactive Prediction Function**
-```python
-def predict_iris_species(sepal_length, sepal_width, petal_length, petal_width):
-    """
-    Predict iris species based on measurements
-    
-    Parameters:
-    - sepal_length: float (cm)
-    - sepal_width: float (cm) 
-    - petal_length: float (cm)
-    - petal_width: float (cm)
-    
-    Returns:
-    - species: string (Setosa, Versicolor, or Virginica)
-    """
-    model = joblib.load('iris_flower_model.pkl')
-    
-    sample = [[sepal_length, sepal_width, petal_length, petal_width]]
-    prediction = model.predict(sample)
-    
-    return prediction[0]
-
-# Example usage
-species = predict_iris_species(5.1, 3.5, 1.4, 0.2)
-print(f"Predicted species: {species}")
-```
 
 ### 🎯 **Example Predictions**
 
@@ -317,30 +259,6 @@ predict_iris_species(6.5, 3.0, 5.2, 2.0)   # → Virginica
 predict_iris_species(7.2, 3.2, 6.0, 1.8)   # → Virginica
 ```
 
-### 🎮 **Interactive Prediction Game**
-```python
-def iris_guessing_game():
-    """Fun interactive game to test your iris knowledge!"""
-    samples = [
-        ([5.1, 3.5, 1.4, 0.2], "Setosa"),
-        ([6.7, 3.1, 4.4, 1.4], "Versicolor"), 
-        ([6.3, 2.9, 5.6, 1.8], "Virginica")
-    ]
-    
-    for i, (measurements, actual) in enumerate(samples):
-        print(f"\n🌸 Sample {i+1}: {measurements}")
-        user_guess = input("Guess the species (Setosa/Versicolor/Virginica): ")
-        prediction = predict_iris_species(*measurements)
-        
-        print(f"Your guess: {user_guess}")
-        print(f"ML Prediction: {prediction}")
-        print(f"Actual: {actual}")
-        print("✅ Correct!" if user_guess.lower() == actual.lower() else "❌ Try again!")
-
-# Run the game
-iris_guessing_game()
-```
-
 ## 🔬 Advanced Usage
 
 ### 📊 **Model Evaluation Metrics**
@@ -399,25 +317,6 @@ print(f"Average CV score: {cv_scores.mean():.3f} (+/- {cv_scores.std() * 2:.3f})
 5. Create a real-time prediction app
 
 
-## ✨ New Enhanced Features
-
-### 🎨 Interactive Design
-
-- **Modern UI/UX**: Beautiful gradient backgrounds with glassmorphism effects
-- **Animated Background Video**: Looping flower videos for immersive experience
-- **Interactive Flower Cards**: Click-to-fill example values with hover effects
-- **Floating Particles**: Dynamic flower emojis floating across the screen
-- **Smooth Animations**: CSS keyframe animations for all elements
-
-### 🌺 Flower Showcase
-
-- **Real Flower Images**: Actual photographs of each iris species
-- **Visual Flower Display**: High-quality images showing true flower colors
-- **Detailed Information**: Comprehensive facts about each flower type with color names
-- **Interactive Examples**: Click any flower card to auto-fill the form
-- **Species-Specific Styling**: Unique colors and animations for each iris type
-- **Dynamic Backgrounds**: Background colors change based on predicted flower type
-
 ### 🚀 Enhanced Functionality
 
 - **Form Validation**: Real-time input validation with visual feedback
@@ -426,22 +325,7 @@ print(f"Average CV score: {cv_scores.mean():.3f} (+/- {cv_scores.std() * 2:.3f})
 - **Error Handling**: Graceful error messages with helpful suggestions
 - **Responsive Design**: Works perfectly on desktop, tablet, and mobile
 
-### 🎭 Visual Effects
 
-- **Real Flower Photography**: High-quality images of actual iris flowers
-- **Dynamic Background Colors**: Background changes based on predicted flower species
-- **Background Videos**: Multiple fallback video sources for reliability
-- **Particle System**: Dynamic floating flower animations
-- **Confetti Effects**: Celebration animations for successful predictions
-- **Glow Effects**: Smooth glowing animations throughout the interface
-- **Hover Interactions**: Elements respond to user interactions
-- **Custom Favicon**: Beautiful iris flower favicon for all devices and sizes
-- **PWA Support**: Web app manifest for mobile installation
-- **Color-Themed Results**: Each flower type displays with its natural color scheme
-
-## 🎨 Favicon and Branding
-
-The application now includes a complete set of favicon files for optimal display across all devices and platforms:
 
 ### 🌸 Design Elements
 
@@ -534,7 +418,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ---
 
-## 🎉 **Happy Coding!** 
+## 🎉 **@itsluckysharma01** 
 
 *Remember: The best way to learn machine learning is by doing. Keep experimenting, keep learning!* 🚀
 
